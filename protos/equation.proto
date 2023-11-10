@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package equation;
+
+service EquationService {
+  rpc GenerateData (EquationRequest) returns (stream EquationResponse);
+}
+
+message EquationRequest {
+  // Параметры для расчета
+  float startTime = 1;
+  float endTime = 2;
+  float step = 3;
+}
+
+message EquationResponse {
+  // Результаты расчета
+  float value = 1;
+}
