@@ -14,7 +14,7 @@ const packageDefinition = protoLoader.loadSync(
 const equation_proto = grpc.loadPackageDefinition(packageDefinition).equation;
 
 function gRPCConnect() {
-    let target = 'localhost:50051';
+    let target = 'localhost:3000';
     return new equation_proto.EquationService(target,
         grpc.credentials.createInsecure());
 

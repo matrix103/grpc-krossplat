@@ -1,7 +1,9 @@
 require('dotenv').config()
 const grpc = require('@grpc/grpc-js');
+const path = require('path');
 const protoLoader = require('@grpc/proto-loader');
-const PROTO_PATH = __dirname + '/../protos/equation.proto';
+const PROTO_PATH = path.join(__dirname, '../protos/equation.proto');
+
 const packageDefinition = protoLoader.loadSync(
     PROTO_PATH,
     {keepCase: true,
@@ -34,9 +36,17 @@ const start = async () => {
     try {
        const server = new grpc.Server();
         server.addService(equation_proto.EquationService.service, {GenerateData: GenerateData});
-        server.bindAsync('0.0.0.0:50051', grpc.ServerCredentials.createInsecure(), () => {
+        server.bindAsync('0.0.0.0:3000',
+          grpc.ServerCredentials.createInsecure(),
+          (err) => {
+            if (err) {
+              console.error(err);
+              return;
+            }
             server.start();
-        });
+            console.log('started');
+            }
+          );
     } catch (e) {
         console.log(e)
     }
