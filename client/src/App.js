@@ -23,12 +23,16 @@ function App() {
     }
 
     socket.current.onopen = () => {
+        console.log(values)
       const message = {
         event: 'connection',
         id: Date.now(),
-        startTime: 0,
-        endTime: 5,
-        step: 1,
+        x1: values.x1,
+        x2: values.x2,
+        y1: values.y1,
+        y2: values.y2,
+        t1: values.t1,
+        t2: values.t2,
         ...values,
       };
       socket.current.send(JSON.stringify(message));

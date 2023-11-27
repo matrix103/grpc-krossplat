@@ -8,12 +8,15 @@ service EquationService {
 
 message EquationRequest {
   // Параметры для расчета
-  float startTime = 1;
-  float endTime = 2;
-  float step = 3;
+  float x1 = 1;
+  float x2 = 2;
+  float y1 = 3;
+  float y2 = 4;
+  float t1 = 5;
+  float t2 = 6;
 }
 
 message EquationResponse {
   // Результаты расчета
-  float value = 1;
+  repeated float value = 1;
 }
