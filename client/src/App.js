@@ -23,7 +23,6 @@ function App() {
     }
 
     socket.current.onopen = () => {
-        console.log(values)
       const message = {
         event: 'connection',
         id: Date.now(),
@@ -40,9 +39,15 @@ function App() {
 
     socket.current.onmessage = (event) => {
       const messageFromWS = JSON.parse(event.data);
+
       setMessages(prev => [messageFromWS, ...prev]);
+
     };
   }
+
+  useEffect(() => {
+    console.log(messages)
+  }, [messages])
 
   useEffect(() => {
     const chart = createChart();
@@ -66,12 +71,6 @@ function App() {
       <button id="work" onClick={connect}>WORK</button>
 
       <canvas id="myChart"></canvas>
-
-      <div>
-        {messages.map((message) => (
-          <p key={message.id}>{message.message}</p>
-        ))}
-      </div>
 
     </div>
   );

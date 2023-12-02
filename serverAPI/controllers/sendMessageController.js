@@ -10,7 +10,6 @@ const sendMessage = (message, ws) => {
         const call = clientGRPC.GenerateData({x1: message.x1, x2: message.x2, y1: message.y1, y2: message.y2, t1: message.t1, t2: message.t2});
 
         call.on('data', value => {
-            console.log("11111111111111111111")
             console.log(`Received response ${value.value}`);
             ws.send(JSON.stringify({...message, message: value.value}));
         });

@@ -16,7 +16,13 @@ message EquationRequest {
   float t2 = 6;
 }
 
+message MyObject {
+  float x = 1;
+  float y = 2;
+  float z = 3;
+}
+
 message EquationResponse {
   // Результаты расчета
-  repeated float value = 1;
+  repeated MyObject value = 1;
 }

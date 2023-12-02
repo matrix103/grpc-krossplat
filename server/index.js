@@ -15,27 +15,20 @@ const packageDefinition = protoLoader.loadSync(
 const equation_proto = grpc.loadPackageDefinition(packageDefinition).equation;
 
 function GenerateData(call) {
-    console.log("222222222222222222222")
-    const x1 = call.request.x1;
-    const x2 = call.request.x2;
-    const y1 = call.request.y1;
-    const y2 = call.request.y2;
-    const t1 = call.request.t1;
-    const t2 = call.request.t2;
+    const { x1, x2, y1, y2, t1, t2 } = call.request;
 
     let count = 0;
-    let numberOfIteration = Math.round((t2-t1))
+    let numberOfIteration = Math.round((t2 - t1))
     let points = []
     const interval = setInterval(() => {
 
         for (let x=x1;x<=x2;x++){
             for (let y=y1;y<=y2;y++){
-                const point = Math.sin(x+(t1+count))+(t1+count)*Math.sin(y+x)
-                points.push(point)
+                const z = Math.sin(x+(t1+count))+(t1+count)*Math.sin(y+x)
+                points.push({x, y, z})
             }
         }
-        if (count < numberOfIteration) {
-            console.log(points)
+        if (count <= numberOfIteration) {
             call.write({value: points});
             points=[]
             count++;
