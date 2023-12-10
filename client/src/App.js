@@ -5,6 +5,8 @@ function App() {
 
   const socket = useRef();
   const [messages, setMessages] = useState([]);
+  const [currentMessage, setCurrentMessage] = useState({});
+  const [sliderValue, setSliderValue] = useState(1);
 
   function connect() {
     socket.current = new WebSocket('ws://localhost:5001');
@@ -17,6 +19,7 @@ function App() {
         }
         values[id] = value;
       });
+      values['last_name'] = document.getElementById('last_name').value
       document.getElementById('work').style.display = 'none';
     } catch (e) {
       return;
@@ -32,6 +35,7 @@ function App() {
         y2: values.y2,
         t1: values.t1,
         t2: values.t2,
+        last_name: values.last_name,
         ...values,
       };
       socket.current.send(JSON.stringify(message));
@@ -41,36 +45,51 @@ function App() {
       const messageFromWS = JSON.parse(event.data);
 
       setMessages(prev => [messageFromWS, ...prev]);
-
     };
   }
 
   useEffect(() => {
-    console.log(messages)
-  }, [messages])
+    const chart = currentMessage && createChart(currentMessage);
+    return () => chart?.destroy();
+  }, [currentMessage]);
 
-  useEffect(() => {
-    const chart = createChart();
-    return () => chart.destroy();
-  }, [])
+  const sliderOnChange = (e) => {
+    const value = e.target.value;
+    if (sliderValue !== value) {
+      setSliderValue(value);
+      setCurrentMessage(messages[value - 1]);
+    }
+  }
 
   return (
     <div className="App">
       <div>
-        <input id='x1' type="text" placeholder='x1' />
-        <input id='x2' type="text" placeholder='x2' />
+        <input id="x1" type="text" placeholder="x1" />
+        <input id="x2" type="text" placeholder="x2" />
       </div>
       <div>
-        <input id='y1' type="text" placeholder='y1' />
-        <input id='y2' type="text" placeholder='y2' />
+        <input id="y1" type="text" placeholder="y1" />
+        <input id="y2" type="text" placeholder="y2" />
       </div>
       <div>
-        <input id='t1' type="text" placeholder='t1' />
-        <input id='t2' type="text" placeholder='t2' />
+        <input id="t1" type="text" placeholder="t1" />
+        <input id="t2" type="text" placeholder="t2" />
       </div>
+      <select name="last_name" id="last_name">
+        <option value="Slepov">Slepov</option>
+        <option value="Suponkin">Suponkin</option>
+      </select>
       <button id="work" onClick={connect}>WORK</button>
+      <div>
+        <label>1</label>
+        <input type="range" id="slider" min="1" max={messages.length} value={sliderValue} onInput={sliderOnChange} />
+        <label>{messages.length}</label>
+      </div>
 
-      <canvas id="myChart"></canvas>
+
+      <div>
+        <canvas id="myChart"></canvas>
+      </div>
 
     </div>
   );
