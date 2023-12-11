@@ -17,12 +17,12 @@ const packageDefinition = protoLoader.loadSync(
     oneofs: true,
   });
 const equation_proto = grpc.loadPackageDefinition(packageDefinition).equation;
-var result = createMatrix();
-var resultTemp = createMatrix();
+
 function GenerateData(call) {
   const { x1, x2, y1, y2, t1, t2, last_name } = call.request;
   console.log(call.request);
-
+  let result = createMatrix(x2+1, y2+1);
+  let resultTemp = createMatrix(x2+1, y2+1);
   let mathFunction;
   switch (last_name) {
     case 'Suponkin':
@@ -43,7 +43,7 @@ function GenerateData(call) {
   const interval = setInterval(() => {
     for (let x = x1; x <= x2; x++) {
       for (let y = y1; y <= y2; y++) {
-        console.log(result[x][y]);
+        console.log(result);
         result[x][y] = resultTemp[x][y] + mathFunction(x, y, t1 + count);
         const z = result[x][y];
         points.push({ x, y, z});
