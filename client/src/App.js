@@ -6,7 +6,8 @@ function App() {
   const socket = useRef();
   const [messages, setMessages] = useState([]);
   const [currentMessage, setCurrentMessage] = useState({});
-  const [sliderValue, setSliderValue] = useState(1);
+  const [sliderValue, setSliderValue] = useState(null);
+  console.log(currentMessage);
 
   function connect() {
     socket.current = new WebSocket('ws://localhost:5001');
@@ -19,7 +20,7 @@ function App() {
         }
         values[id] = value;
       });
-      values['last_name'] = document.getElementById('last_name').value
+      values['last_name'] = document.getElementById('last_name').value;
       document.getElementById('work').style.display = 'none';
     } catch (e) {
       return;
@@ -53,44 +54,88 @@ function App() {
     return () => chart?.destroy();
   }, [currentMessage]);
 
-  const sliderOnChange = (e) => {
-    const value = e.target.value;
-    if (sliderValue !== value) {
-      setSliderValue(value);
-      setCurrentMessage(messages[value - 1]);
-    }
-  }
+  useEffect(() => {
+    messages.length && setCurrentMessage(messages[sliderValue]);
+  }, [sliderValue]);
 
   return (
     <div className="App">
-      <div>
-        <input id="x1" type="text" placeholder="x1" />
-        <input id="x2" type="text" placeholder="x2" />
-      </div>
-      <div>
-        <input id="y1" type="text" placeholder="y1" />
-        <input id="y2" type="text" placeholder="y2" />
-      </div>
-      <div>
-        <input id="t1" type="text" placeholder="t1" />
-        <input id="t2" type="text" placeholder="t2" />
-      </div>
-      <select name="last_name" id="last_name">
-        <option value="Slepov">Slepov</option>
-        <option value="Suponkin">Suponkin</option>
-      </select>
-      <button id="work" onClick={connect}>WORK</button>
-      <div>
-        <label>1</label>
-        <input type="range" id="slider" min="1" max={messages.length} value={sliderValue} onInput={sliderOnChange} />
-        <label>{messages.length}</label>
-      </div>
+      <div className="container mt-3">
+        <div className="input-group mb-3">
+          <input id="x1" type="text" className="form-control" placeholder="x1" />
+          <span className="input-group-text">начальное - x1, конечное - x2</span>
+          <input id="x2" type="text" className="form-control" placeholder="x2" />
+        </div>
+        <div className="input-group mb-3">
+          <input id="y1" type="text" className="form-control" placeholder="y1" />
+          <span className="input-group-text">начальное - y1, конечное - y2</span>
+          <input id="y2" type="text" className="form-control" placeholder="y2" />
+        </div>
+        <div className="input-group mb-3">
+          <input id="t1" type="text" className="form-control" placeholder="t1" />
+          <span className="input-group-text">начальное - t1, конечное - t2</span>
+          <input id="t2" type="text" className="form-control" placeholder="t2" />
+        </div>
+        <div className="form-floating">
+          <select className="form-select" id="last_name" name="last_name" aria-label="Floating label select example">
+            <option selected value="Slepov">Тестовый</option>
+            <option value="Suponkin">Супонькин</option>
+            <option value="Sokolov">Соколов</option>
+          </select>
+          <label htmlFor="last_name">Чей метод использовать:</label>
+        </div>
+
+        <button onClick={connect} id="work" type="button" className="btn btn-outline-primary mt-3 mb-3">Запуск</button>
+
+        <ul className="pagination mt-3">
+          <li className="page-item">
+            <button
+              disabled={sliderValue === 0}
+              className="page-link"
+              onClick={() => setSliderValue((prevState) => prevState - 1)}
+            >
+              Назад
+            </button>
+          </li>
+          {messages.map((el, i) => {
+            return <li className="page-item">
+              <button onClick={() => {
+                setSliderValue(i);
+              }} className={'page-link '  + (sliderValue === i ? 'active' : '')}
+              >
+                {i + 1}
+              </button>
+            </li>;
+          })}
+          <li className="page-item">
+            <button
+              onClick={() => setSliderValue((prevState) => prevState + 1)}
+              disabled={sliderValue === messages.length - 1}
+              className="page-link"
+            >
+              Вперед
+            </button>
+          </li>
+        </ul>
 
 
-      <div>
-        <canvas id="myChart"></canvas>
+        <div>
+          <canvas id="myChart"></canvas>
+          <div style={{
+            background: 'linear-gradient(to right, #0000FF, green, #FF0000)',
+            display: 'flex',
+            justifyContent: 'space-between',
+            width: '100%',
+            color: 'white',
+            padding: 10,
+            borderRadius: 16,
+            boxSizing: 'border-box',
+          }}>
+            <span id="gradMinValue">0</span>
+            <span id="gradMaxValue">0</span>
+          </div>
+        </div>
       </div>
-
     </div>
   );
 }

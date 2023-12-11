@@ -4,11 +4,20 @@ export const createChart = (message) => {
   if (!message.message) {
     return;
   }
-  const labelsData = message.message.map(({ x, y }) => {
-    return { x, y }
+  const labelsData = message.message.map(({ x, y, z }) => {
+    return {
+      x,
+      y,
+      // r: Math.abs(z * 2)
+      r: 20
+    }
   });
-  const labelsSorted = message.message.sort((a, b) => a.z - b.z);
+
+  const labelsSorted = message.message.slice().sort((a, b) => a.z - b.z);
   const minZ = labelsSorted[0].z, maxZ = labelsSorted[labelsSorted.length - 1].z;
+  ['gradMinValue', 'gradMaxValue'].forEach(el => {
+    document.getElementById(el).innerText = el === 'gradMinValue' ? minZ : maxZ;
+  });
   const labelsColors  = message.message?.map(({ z }) => {
     return getColorForZ(z, minZ, maxZ);
   });
@@ -22,7 +31,7 @@ export const createChart = (message) => {
         datasets: [{
           data: labelsData,
           backgroundColor: labelsColors,
-          label: 'Bubble Chart',
+          label: 'Chart',
         }]
       },
     }

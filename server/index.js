@@ -4,6 +4,7 @@ const path = require('path');
 const protoLoader = require('@grpc/proto-loader');
 const { Suponkin } = require('./math/Suponkin');
 const { Slepov } = require('./math/Slepov');
+const { Sokolov } = require('./math/Sokolov');
 const PROTO_PATH = path.join(__dirname, '../protos/equation.proto');
 
 const packageDefinition = protoLoader.loadSync(
@@ -25,6 +26,9 @@ function GenerateData(call) {
   switch (last_name) {
     case 'Suponkin':
       mathFunction = Suponkin;
+      break;
+    case 'Sokolov':
+      mathFunction = Sokolov;
       break;
     default:
       mathFunction = Slepov;
