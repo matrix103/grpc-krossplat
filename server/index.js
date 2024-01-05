@@ -39,12 +39,25 @@ function GenerateData(call) {
   let count = 0;
   let numberOfIteration = Math.round((t2 - t1));
   let points = [];
+  const alpha = 0.3;
+  const dt = 1;
+  const dx = 1;
+  const dy = 1;
+
+  for (let x = x1; x <= x2; x++) {
+    for (let y = y1; y <= y2; y++) {
+      result[x][y] = mathFunction(x, y, 0);
+    }
+  }
 
   const interval = setInterval(() => {
+    resultTemp = result;
     for (let x = x1; x <= x2; x++) {
       for (let y = y1; y <= y2; y++) {
-        console.log(result);
-        result[x][y] = resultTemp[x][y] + mathFunction(x, y, t1 + count);
+        const a = resultTemp[x][y];
+        const b = alpha * dt / (dx * dx) * (resultTemp[x + 1][y] - 2 * resultTemp[x][y] + resultTemp[x - 1][y])
+            + alpha * dt / (dy * dy) * (resultTemp[x][y + 1] - 2 * resultTemp[x][y] + resultTemp[x][y - 1]);
+        result[x][y] = a + b;
         const z = result[x][y];
         points.push({ x, y, z});
       }

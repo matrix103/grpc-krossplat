@@ -3,10 +3,13 @@ const Suponkin = (x, y, t) => {
       return 0;
   }
   const dx = 1, dy = 1, dt = 1, alpha = 0.3;
-  const z0 = Math.sin(2*x) * Math.cos(5*y);
-  const z1 = z0 * Math.exp(-alpha * t * dt);
+  const z0 = Math.sin(x/6) * Math.cos(5*y/6);
+  // const z0 = Math.sin(2*x) * Math.cos(5*y);
+  // const z1 = z0 * Math.exp(-alpha * t * dt);
+  const z1 = Math.exp(-alpha * t * dt);
 
-  return z0 + alpha * dt / (dx * dx) * z0 + alpha * dt / (dy * dy) * z0 + z1 * dt;
+  // return z0 + alpha * dt / (dx * dx) * z0 + alpha * dt / (dy * dy) * z0 + z1 * dt;
+  return z0;
 };
 
 module.exports = { Suponkin };
