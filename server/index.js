@@ -2,27 +2,27 @@ require('dotenv').config();
 const grpc = require('@grpc/grpc-js');
 const path = require('path');
 const protoLoader = require('@grpc/proto-loader');
-const { Suponkin } = require('./math/Suponkin');
-const { Slepov } = require('./math/Slepov');
-const { Sokolov } = require('./math/Sokolov');
+const {Suponkin} = require('./math/Suponkin');
+const {Slepov} = require('./math/Slepov');
+const {Sokolov} = require('./math/Sokolov');
 const PROTO_PATH = path.join(__dirname, '../protos/equation.proto');
 
 const packageDefinition = protoLoader.loadSync(
-    PROTO_PATH,
-    {
-      keepCase: true,
-      longs: String,
-      enums: String,
-      defaults: true,
-      oneofs: true,
-    });
+  PROTO_PATH,
+  {
+    keepCase: true,
+    longs: String,
+    enums: String,
+    defaults: true,
+    oneofs: true,
+  });
 const equation_proto = grpc.loadPackageDefinition(packageDefinition).equation;
 
 function GenerateData(call) {
-  const { x1, x2, y1, y2, t1, t2, last_name } = call.request;
+  const {x1, x2, y1, y2, t1, t2, last_name} = call.request;
   console.log(call.request);
-  let result = createMatrix(x2+2, y2+2);
-  let resultTemp = createMatrix(x2+2, y2+2);
+  let result = createMatrix(x2 + 2, y2 + 2);
+  let resultTemp = createMatrix(x2 + 2, y2 + 2);
   let mathFunction;
   switch (last_name) {
     case 'Suponkin':
@@ -46,12 +46,11 @@ function GenerateData(call) {
 
   for (let x = x1; x <= x2; x++) {
     for (let y = y1; y <= y2; y++) {
-        if (x*y === 0 || x > 4 || y > 4){
-            result[x][y] = 0;
-        }
-        else{
-            result[x][y] = mathFunction(x, y, 0);
-        }
+      if (x * y === 0 || x > 4 || y > 4) {
+        result[x][y] = 0;
+      } else {
+        result[x][y] = mathFunction(x, y, 0);
+      }
     }
   }
 
@@ -61,14 +60,14 @@ function GenerateData(call) {
       for (let y = y1; y <= y2; y++) {
         const a = resultTemp[x][y];
         let b = b = alpha * dt / (dx * dx) * (resultTemp[x + 1][y] - 2 * resultTemp[x][y] + resultTemp[x - 1][y])
-            + alpha * dt / (dy * dy) * (resultTemp[x][y + 1] - 2 * resultTemp[x][y] + resultTemp[x][y - 1]);
+          + alpha * dt / (dy * dy) * (resultTemp[x][y + 1] - 2 * resultTemp[x][y] + resultTemp[x][y - 1]);
         result[x][y] = a + b;
         const z = result[x][y];
-        points.push({ x, y, z});
+        points.push({x, y, z});
       }
     }
     if (count <= numberOfIteration) {
-      call.write({ value: points });
+      call.write({value: points});
       points = [];
       count++;
       resultTemp = result;
@@ -82,17 +81,17 @@ function GenerateData(call) {
 const start = async () => {
   try {
     const server = new grpc.Server();
-    server.addService(equation_proto.EquationService.service, { GenerateData: GenerateData });
+    server.addService(equation_proto.EquationService.service, {GenerateData: GenerateData});
     server.bindAsync('0.0.0.0:3000',
-        grpc.ServerCredentials.createInsecure(),
-        (err) => {
-          if (err) {
-            console.error(err);
-            return;
-          }
-          server.start();
-          console.log('started');
-        },
+      grpc.ServerCredentials.createInsecure(),
+      (err) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        server.start();
+        console.log('started');
+      },
     );
   } catch (e) {
     console.log(e);
