@@ -59,8 +59,7 @@ function GenerateData(call) {
     for (let x = x1; x <= x2; x++) {
       for (let y = y1; y <= y2; y++) {
         const a = resultTemp[x][y];
-        let b = b = alpha * dt / (dx * dx) * (resultTemp[x + 1][y] - 2 * resultTemp[x][y] + resultTemp[x - 1][y])
-          + alpha * dt / (dy * dy) * (resultTemp[x][y + 1] - 2 * resultTemp[x][y] + resultTemp[x][y - 1]);
+        let b = alpha * dt / (dx * dx) * (resultTemp[x + 1][y] - 2 * resultTemp[x][y] + resultTemp[x - 1][y]) + alpha * dt / (dy * dy) * (resultTemp[x][y + 1] - 2 * resultTemp[x][y] + resultTemp[x][y - 1]);
         result[x][y] = a + b;
         const z = result[x][y];
         points.push({x, y, z});

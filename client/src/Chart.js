@@ -29,8 +29,8 @@ export const createChart = (message) => {
       type: 'bubble',
       data: {
         datasets: [{
-          data: labelsData,
-          backgroundColor: labelsColors,
+          data: labelsData.reverse(),
+          backgroundColor: labelsColors.reverse(),
           label: 'Chart',
         }]
       },
