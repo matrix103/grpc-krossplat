@@ -45,7 +45,7 @@ function App() {
     socket.current.onmessage = (event) => {
       const messageFromWS = JSON.parse(event.data);
 
-      setMessages(prev => [messageFromWS, ...prev]);
+      setMessages(prev => [...prev, messageFromWS]);
     };
   }
 
