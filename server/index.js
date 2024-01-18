@@ -54,6 +54,10 @@ function GenerateData(call) {
     resultTemp = result;
     for (let x = x1; x <= x2; x++) {
       for (let y = y1; y <= y2; y++) {
+        if (x > 100 || y > 100){
+          result[x][y] = mathFunction(x, y, t);
+          continue;
+        }
         const prev = resultTemp[x][y];
         const step = alpha * dt / (dx * dx) * (resultTemp[x + 1][y] - 2 * resultTemp[x][y] + resultTemp[x - 1][y]) + alpha * dt / (dy * dy) * (resultTemp[x][y + 1] - 2 * resultTemp[x][y] + resultTemp[x][y - 1]);
         result[x][y] = prev + step;
@@ -65,6 +69,10 @@ function GenerateData(call) {
     resultTemp = result;
     for (let x = x1; x <= x2; x++) {
       for (let y = y1; y <= y2; y++) {
+        if (x > 100 || y > 100){
+          result[x][y] = mathFunction(x, y, t);
+          continue;
+        }
         const prev = resultTemp[x][y];
         const step = alpha * dt / (dx * dx) * (resultTemp[x + 1][y] - 2 * resultTemp[x][y] + resultTemp[x - 1][y])
           + alpha * dt / (dy * dy) * (resultTemp[x][y + 1] - 2 * resultTemp[x][y] + resultTemp[x][y - 1]);
