@@ -46,7 +46,7 @@ function GenerateData(call) {
 
   for (let x = x1; x <= x2; x++) {
     for (let y = y1; y <= y2; y++) {
-      result[x][y] = mathFunction(x, y, 0);
+      result[x][y] = 0;
     }
   }
 
@@ -55,7 +55,7 @@ function GenerateData(call) {
     for (let x = x1; x <= x2; x++) {
       for (let y = y1; y <= y2; y++) {
         if (x > 100 || y > 100){
-          result[x][y] = mathFunction(x, y, t);
+          result[x][y] = mathFunction(x, y, 0);
           continue;
         }
         const prev = resultTemp[x][y];
@@ -70,7 +70,9 @@ function GenerateData(call) {
     for (let x = x1; x <= x2; x++) {
       for (let y = y1; y <= y2; y++) {
         if (x > 100 || y > 100){
-          result[x][y] = mathFunction(x, y, t);
+          result[x][y] = mathFunction(x, y, 0);
+          const z = result[x][y];
+          points.push({x, y, z});
           continue;
         }
         const prev = resultTemp[x][y];
