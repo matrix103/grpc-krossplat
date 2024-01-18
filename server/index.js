@@ -39,17 +39,24 @@ function GenerateData(call) {
   let count = 0;
   let numberOfIteration = Math.round((t2 - t1));
   let points = [];
-  const alpha = 1;
+  const alpha = .5;
   const dt = 1;
   const dx = 1;
   const dy = 1;
 
   for (let x = x1; x <= x2; x++) {
     for (let y = y1; y <= y2; y++) {
-      if (x * y === 0 || x > 4 || y > 4) {
-        result[x][y] = 0;
-      } else {
-        result[x][y] = mathFunction(x, y, 0);
+      result[x][y] = mathFunction(x, y, 0);
+    }
+  }
+
+  for (let t = 1; t < t1; t++){
+    resultTemp = result;
+    for (let x = x1; x <= x2; x++) {
+      for (let y = y1; y <= y2; y++) {
+        const prev = resultTemp[x][y];
+        const step = alpha * dt / (dx * dx) * (resultTemp[x + 1][y] - 2 * resultTemp[x][y] + resultTemp[x - 1][y]) + alpha * dt / (dy * dy) * (resultTemp[x][y + 1] - 2 * resultTemp[x][y] + resultTemp[x][y - 1]);
+        result[x][y] = prev + step;
       }
     }
   }
@@ -58,9 +65,10 @@ function GenerateData(call) {
     resultTemp = result;
     for (let x = x1; x <= x2; x++) {
       for (let y = y1; y <= y2; y++) {
-        const a = resultTemp[x][y];
-        let b = alpha * dt / (dx * dx) * (resultTemp[x + 1][y] - 2 * resultTemp[x][y] + resultTemp[x - 1][y]) + alpha * dt / (dy * dy) * (resultTemp[x][y + 1] - 2 * resultTemp[x][y] + resultTemp[x][y - 1]);
-        result[x][y] = a + b;
+        const prev = resultTemp[x][y];
+        const step = alpha * dt / (dx * dx) * (resultTemp[x + 1][y] - 2 * resultTemp[x][y] + resultTemp[x - 1][y])
+          + alpha * dt / (dy * dy) * (resultTemp[x][y + 1] - 2 * resultTemp[x][y] + resultTemp[x][y - 1]);
+        result[x][y] = prev + step;
         const z = result[x][y];
         points.push({x, y, z});
       }
