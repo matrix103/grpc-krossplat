@@ -46,7 +46,7 @@ function GenerateData(call) {
 
   for (let x = x1; x <= x2; x++) {
     for (let y = y1; y <= y2; y++) {
-      result[x][y] = 0;
+      result[x][y] = mathFunction(x, y, 0);
     }
   }
 
@@ -59,7 +59,8 @@ function GenerateData(call) {
           continue;
         }
         const prev = resultTemp[x][y];
-        const step = alpha * dt / (dx * dx) * (resultTemp[x + 1][y] - 2 * resultTemp[x][y] + resultTemp[x - 1][y]) + alpha * dt / (dy * dy) * (resultTemp[x][y + 1] - 2 * resultTemp[x][y] + resultTemp[x][y - 1]);
+        const step =  alpha * dt / (dx * dx) * (resultTemp[x + 1][y] - 2 * resultTemp[x][y] + resultTemp[x - 1][y]) +
+                              alpha * dt / (dy * dy) * (resultTemp[x][y + 1] - 2 * resultTemp[x][y] + resultTemp[x][y - 1]);
         result[x][y] = prev + step;
       }
     }
@@ -76,8 +77,8 @@ function GenerateData(call) {
           continue;
         }
         const prev = resultTemp[x][y];
-        const step = alpha * dt / (dx * dx) * (resultTemp[x + 1][y] - 2 * resultTemp[x][y] + resultTemp[x - 1][y])
-          + alpha * dt / (dy * dy) * (resultTemp[x][y + 1] - 2 * resultTemp[x][y] + resultTemp[x][y - 1]);
+        const step = alpha * dt / (dx * dx) * (resultTemp[x + 1][y] - 2 * resultTemp[x][y] + resultTemp[x - 1][y]) +
+                             alpha * dt / (dy * dy) * (resultTemp[x][y + 1] - 2 * resultTemp[x][y] + resultTemp[x][y - 1]);
         result[x][y] = prev + step;
         const z = result[x][y];
         points.push({x, y, z});
